@@ -52,8 +52,7 @@ class ApiRouterExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('resolver'))
 			->setClass(ApiRoutesResolver::class)
-			->addSetup('prepandRoutes', [$builder->getDefinition('router'), $routes])
-			->addTag('run');
+			->addSetup('prepandRoutes', [$builder->getDefinition('router'), $routes]);
 	}
 
 

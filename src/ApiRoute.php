@@ -241,7 +241,7 @@ class ApiRoute extends ApiRouteSpec implements IRouter
 			return Strings::upper($request->getHeader('X-HTTP-Method-Override'));
 		}
 
-		if ($method = Strings::upper($request->getQuery('__apiRouteMethod'))) {
+		if ($method = Strings::upper((string)$request->getQuery('__apiRouteMethod'))) {
 			if (isset($this->actions[$method])) {
 				return $method;
 			}
@@ -259,7 +259,7 @@ class ApiRoute extends ApiRouteSpec implements IRouter
 	/**
 	 * Maps HTTP request to a Request object.
 	 */
-	public function match(Nette\Http\IRequest $httpRequest): ?Request
+	public function match(Nette\Http\IRequest $httpRequest): ?array
 	{
 		/**
 		 * ApiRoute can be easily disabled
@@ -365,24 +365,23 @@ class ApiRoute extends ApiRouteSpec implements IRouter
 		 */
 		$this->onMatch($this, $request);
 
-		return $request;
+		$params[Nette\Application\UI\Presenter::PRESENTER_KEY] = $this->presenter;
+
+		return $params;
 	}
 
 
 	/**
 	 * Constructs absolute URL from Request object.
 	 */
-	public function constructUrl(Request $request, Nette\Http\Url $url): ?string
+	public function constructUrl(array $params, Nette\Http\UrlScript $url): ?string
 	{
-		if ($this->presenter != $request->getPresenterName()) {
-			return null;
-		}
-
 		$base_url = $url->getBaseUrl();
 
-		$action = $request->getParameter('action');
-		$parameters = $request->getParameters();
+		$action = $params['action'];
+		$parameters = $params;
 		unset($parameters['action']);
+		unset($parameters[Nette\Application\UI\Presenter::PRESENTER_KEY]);
 		$path = ltrim($this->getPath(), '/');
 
 		if (array_search($action, $this->actions, true) === false) {
