@@ -183,7 +183,7 @@ class ApiRouterExtension extends CompilerExtension
 		$action_route->setPriority($action_route->getPriority() ?: $route->getPriority());
 		$action_route->setFormat($action_route->getFormat() ?: $route->getFormat());
 		$action_route->setSection($action_route->getSection() ?: $route->getSection());
-		$action_route->setAction($action, $action_route->getMethod() ?: null);
+		$action_route->setAction($action, $action_route->getMethod() ?: $action);
 
 		$routes[$route->getPriority()][] = $action_route;
 	}

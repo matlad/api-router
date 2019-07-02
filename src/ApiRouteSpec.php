@@ -133,7 +133,7 @@ abstract class ApiRouteSpec
 	}
 
 
-	public function getMethod(): string
+	public function getMethod(): ?string
 	{
 		return $this->method;
 	}
